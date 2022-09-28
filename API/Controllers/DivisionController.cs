@@ -1,5 +1,6 @@
 ﻿using API.Context;
 using API.Models;
+using API.Repositories.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -10,25 +11,25 @@ namespace API.Controllers
     [ApiController]
     public class DivisionController : ControllerBase
     {
-        MyContext myContext;
+        DivisionRepository divisionRepository;
 
-        public DivisionController(MyContext myContext)
+        public DivisionController(DivisionRepository divisionRepository)
         {
-            this.myContext = myContext;
+            this.divisionRepository = divisionRepository;
         }
 
         //READ
         [HttpGet]
         public IActionResult Get()
         {
-            var data = myContext.Divisions.ToList();
+            var data = divisionRepository.Get();
             return Ok(new { message = "Data Retrieval Succeded", statusCode = 200, data = data });
         }
 
         [HttpGet("{id:int}")]
         public IActionResult Get(int id)
         {
-            var data = myContext.Divisions.Find(id);
+            var data = divisionRepository.Get(id);
             if (data == null)
                 return Ok(new { message = "Data Retrieval Succeded", statusCode = 200, data = "null" });
             return Ok(new { message = "Data Retrieval Succeded", statusCode = 200, data = data });
@@ -38,10 +39,7 @@ namespace API.Controllers
         [HttpPost("DivisionViewModel")]
         public IActionResult Post([FromQuery] DivisionViewModel divVM)
         {
-            Division division = new Division();
-            division.Name = divVM.Name;
-            myContext.Divisions.Add(division);
-            var result = myContext.SaveChanges();
+            var result = divisionRepository.Post(divVM);
             if (result > 0)
                 return Ok(new { statusCode = 200, message = "Add Data Succeded" });
             return BadRequest(new { statusCode = 400, message = "Add Data Failed" });
@@ -51,10 +49,7 @@ namespace API.Controllers
         [HttpPut("Division")]
         public IActionResult Put([FromQuery] Division division)
         {
-            var data = myContext.Divisions.Find(division.Id);
-            data.Name = division.Name;
-            myContext.Divisions.Update(data);
-            var result = myContext.SaveChanges();
+            var result = divisionRepository.Put(division);
             if (result > 0)
                 return Ok(new { statusCode = 200, message = "Update Data Succeded" });
             return BadRequest(new { statusCode = 400, message = "Update Data Failed" });
@@ -64,12 +59,10 @@ namespace API.Controllers
         [HttpDelete("{id:int}")]
         public IActionResult Delete(int id)
         {
-            var data = myContext.Divisions.Find(id);
-            myContext.Divisions.Remove(data);
-            var result = myContext.SaveChanges();
+            var result = divisionRepository.Delete(id);
             if (result > 0)
-                return Ok(new { message = "Data Removal Succeded", statusCode = 200, data = "null" });
-            return BadRequest(new { message = "Data Retrieval Failed", statusCode = 400, data = data });
+                return Ok(new { statusCode = 200, message = "Data Removal Succeded" });
+            return BadRequest(new { statusCode = 400, message = "Data Retrieval Failed" });
         }
     }
 }

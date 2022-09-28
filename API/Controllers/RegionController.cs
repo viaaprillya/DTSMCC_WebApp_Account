@@ -1,8 +1,10 @@
 ﻿using API.Context;
 using API.Models;
+using API.Repositories.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace API.Controllers
 {
@@ -10,25 +12,25 @@ namespace API.Controllers
     [ApiController]
     public class RegionController : ControllerBase
     {
-        MyContext myContext;
+        RegionRepository regionRepository;
 
-        public RegionController(MyContext myContext)
+        public RegionController(RegionRepository regionRepository)
         {
-            this.myContext = myContext;
+            this.regionRepository = regionRepository;
         }
 
         //READ
         [HttpGet]
         public IActionResult Get()
         {
-            var data = myContext.Regions.ToList();
+            var data = regionRepository.Get();
             return Ok(new { message = "Data Retrieval Succeded", statusCode = 200, data = data });
         }
 
         [HttpGet("{id:int}")]
         public IActionResult Get(int id)
         {
-            var data = myContext.Regions.Find(id);
+            var data = regionRepository.Get(id);
             if (data == null)
                 return Ok(new { message = "Data Retrieval Succeded", statusCode = 200, data = "null" });
             return Ok(new { message = "Data Retrieval Succeded", statusCode = 200, data = data });
@@ -38,11 +40,7 @@ namespace API.Controllers
         [HttpPost("RegionViewModel")]
         public IActionResult Post([FromQuery] RegionViewModel regVM)
         {
-            Region region = new Region();
-            region.Name = regVM.Name;
-            region.DivisionId = regVM.DivisionId;
-            myContext.Regions.Add(region);
-            var result = myContext.SaveChanges();
+            var result = regionRepository.Post(regVM);
             if (result > 0)
                 return Ok(new { statusCode = 200, message = "Add Data Succeded" });
             return BadRequest(new { statusCode = 400, message = "Add Data Failed" });
@@ -50,17 +48,9 @@ namespace API.Controllers
 
         //UPDATE
         [HttpPut("RegionEditViewModel")]
-        public IActionResult Put([FromQuery] RegionEditViewModel regVM)
+        public IActionResult Put([FromQuery] RegionEditViewModel regEVM)
         {
-            Region region = new Region();
-            region.Id = regVM.Id;
-            region.Name = regVM.Name;
-            region.DivisionId = regVM.DivisionId;
-            var data = myContext.Regions.Find(region.Id);
-            data.Name = region.Name;
-            data.DivisionId = region.DivisionId;
-            myContext.Regions.Update(data);
-            var result = myContext.SaveChanges();
+            var result = regionRepository.Put(regEVM);
             if (result > 0)
                 return Ok(new { statusCode = 200, message = "Update Data Succeded" });
             return BadRequest(new { statusCode = 400, message = "Update Data Failed" });
@@ -70,12 +60,10 @@ namespace API.Controllers
         [HttpDelete("{id:int}")]
         public IActionResult Delete(int id)
         {
-            var data = myContext.Regions.Find(id);
-            myContext.Regions.Remove(data);
-            var result = myContext.SaveChanges();
+            var result = regionRepository.Delete(id);
             if (result > 0)
-                return Ok(new { message = "Data Removal Succeded", statusCode = 200, data = "null" });
-            return BadRequest(new { message = "Data Retrieval Failed", statusCode = 400, data = data });
+                return Ok(new { statusCode = 200, message = "Data Removal Succeded" });
+            return BadRequest(new { statusCode = 400, message = "Data Retrieval Failed" });
         }
     }
 }
