@@ -29,6 +29,12 @@ namespace DTSMCC_WebApp
             services.AddControllersWithViews();
             services.AddDbContext<MyContext>(option =>
             option.UseSqlServer(Configuration.GetConnectionString("MyConnection")));
+            services.AddSession(option =>
+            { 
+                option.IdleTimeout = TimeSpan.FromMinutes(5);
+                option.Cookie.HttpOnly = true;
+                option.Cookie.IsEssential = true;
+        });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +56,8 @@ namespace DTSMCC_WebApp
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,5 +1,6 @@
 ﻿using API.Repositories.Data;
 using API.ViewModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -30,19 +31,31 @@ namespace DTSMCC_WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login (Login login)
+        public async Task<IActionResult> Login (Login login)
         {
             StringContent content = new StringContent(JsonConvert.SerializeObject(login), Encoding.UTF8, "application/json");
             var result = HttpClient.PostAsync(address, content).Result;
             if (result.IsSuccessStatusCode)
             {
-                return RedirectToAction("Index", "Home");
+                var data = JsonConvert.DeserializeObject<ResponseClient>(await result.Content.ReadAsStringAsync());
+                HttpContext.Session.SetString("Role", data.data.Role);
+                return RedirectToAction("Index", "AdminPanel");
             }
             return View();
         }
 
+        public IActionResult Registrasi()
+        {
+            return View();
+        }
+
         [HttpPost]
-        public IActionResult Register(Register register)
+        public IActionResult Registrasi(Register register)
+        {
+            return View();
+        }
+
+        public IActionResult ForgotPassword()
         {
             return View();
         }
@@ -53,11 +66,7 @@ namespace DTSMCC_WebApp.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult ForgotPassword()
-        {
-            return View();
-        }
+
 
 
 

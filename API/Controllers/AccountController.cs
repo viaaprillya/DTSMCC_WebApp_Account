@@ -52,11 +52,5 @@ namespace API.Controllers
                 return Ok(new { statusCode = 200, message = "Change Password Succeded" });
             return BadRequest(new { statusCode = 400, message = "Change Password Failed" });
         }
-
-        //[HttpPost]
-        //public IActionResult ForgotPassword()
-        //{
-        //    return Ok();
-        //}
     }
 }

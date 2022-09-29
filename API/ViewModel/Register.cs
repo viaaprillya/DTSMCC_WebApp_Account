@@ -1,4 +1,5 @@
 ﻿namespace API.ViewModel
+
 {
     public class Register
     {
