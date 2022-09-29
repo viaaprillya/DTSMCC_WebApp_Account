@@ -42,7 +42,7 @@ namespace DTSMCC_WebApp.Controllers
                 HttpContext.Session.SetString("Role", data.data.Role);
                 return RedirectToAction("Index", "AdminPanel");
             }
-            return View("Unauthorize", "ErrorPage");
+            return View("Unauthorized", "ErrorPage");
         }
 
         public IActionResult Registrasi()
