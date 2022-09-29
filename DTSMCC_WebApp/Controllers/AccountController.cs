@@ -1,6 +1,5 @@
 ﻿using API.Repositories.Data;
 using API.ViewModel;
-using DTSMCC_WebApp.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
