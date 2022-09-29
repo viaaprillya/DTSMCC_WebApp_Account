@@ -45,7 +45,7 @@ namespace API.Controllers
             return BadRequest(new { statusCode = 400, message = "Registration Failed" });
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("ChangePassword")]
         public IActionResult ChangePassword(ChangePassword changePassword)
         {

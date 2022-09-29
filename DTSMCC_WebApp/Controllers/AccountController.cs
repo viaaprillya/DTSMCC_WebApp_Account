@@ -70,7 +70,7 @@ namespace DTSMCC_WebApp.Controllers
             return View();
         }
 
-        [HttpPut]
+        [HttpPost]
         public async Task<IActionResult> ForgotPassword(ChangePassword changePassword)
         {
             address = "https://localhost:5001/api/Account/ChangePassword";
