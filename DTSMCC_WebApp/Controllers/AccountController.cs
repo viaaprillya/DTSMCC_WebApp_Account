@@ -1,8 +1,10 @@
 ﻿using API.Repositories.Data;
 using API.ViewModel;
+using DTSMCC_WebApp.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
@@ -50,8 +52,15 @@ namespace DTSMCC_WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Registrasi(Register register)
+        public async Task<IActionResult> Registrasi(Register register)
         {
+            StringContent content = new StringContent(JsonConvert.SerializeObject(register), Encoding.UTF8, "application/json");
+            var result = HttpClient.PostAsync(address, content).Result;
+            if (result.IsSuccessStatusCode)
+            {
+                var data = JsonConvert.DeserializeObject<ResponseClient>(await result.Content.ReadAsStringAsync());
+                return RedirectToAction("RegistrationSucceded", "SuccessPage");
+            }
             return View();
         }
 
@@ -61,8 +70,15 @@ namespace DTSMCC_WebApp.Controllers
         }
 
         [HttpPut]
-        public IActionResult ChangePassword(ChangePassword changePassword)
+        public async Task<IActionResult> ChangePassword(ChangePassword changePassword)
         {
+            StringContent content = new StringContent(JsonConvert.SerializeObject(changePassword), Encoding.UTF8, "application/json");
+            var result = HttpClient.PostAsync(address, content).Result;
+            if (result.IsSuccessStatusCode)
+            {
+                var data = JsonConvert.DeserializeObject<ResponseClient>(await result.Content.ReadAsStringAsync());
+                return RedirectToAction("ChangePasswordSucceded", "SuccessPage");
+            }
             return View();
         }
 
