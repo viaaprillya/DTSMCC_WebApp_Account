@@ -1,5 +1,6 @@
 using API.Context;
 using API.Repositories.Data;
+using API.Repositories.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -54,10 +55,10 @@ namespace API
             });
 
             #region Dependency Injection
-
             services.AddScoped<DivisionRepository>();
             services.AddScoped<DepartmentRepository>();
             services.AddScoped<RegionRepository>();
+            services.AddScoped<AccountRepository>();
             #endregion
         }
 
@@ -67,12 +68,6 @@ namespace API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(options =>
-                {
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-                    options.RoutePrefix = string.Empty;
-                });
             }
 
             app.UseHttpsRedirection();
@@ -84,6 +79,13 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                options.RoutePrefix = string.Empty;
             });
         }
     }

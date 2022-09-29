@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace API.Models
+namespace API.ViewModel
 {
-    public class RegionViewModel
+    public class RegionEditViewModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public int DivisionId { get; set; }
     }

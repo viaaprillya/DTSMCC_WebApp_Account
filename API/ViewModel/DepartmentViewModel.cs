@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace API.Models
+namespace API.ViewModel
 {
     public class DepartmentViewModel
     {
