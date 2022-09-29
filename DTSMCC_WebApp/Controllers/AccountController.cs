@@ -1,6 +1,5 @@
 ﻿using API.Repositories.Data;
 using API.ViewModel;
-using DTSMCC_WebApp.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -43,7 +42,7 @@ namespace DTSMCC_WebApp.Controllers
                 HttpContext.Session.SetString("Role", data.data.Role);
                 return RedirectToAction("Index", "AdminPanel");
             }
-            return View();
+            return View("Unauthorize", "ErrorPage");
         }
 
         public IActionResult Registrasi()

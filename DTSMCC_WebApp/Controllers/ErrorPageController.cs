@@ -4,7 +4,7 @@ namespace DTSMCC_WebApp.Controllers
 {
     public class ErrorPageController : Controller
     {
-        public IActionResult Unauthorized()
+        public IActionResult Unauthorize()
         {
             return View();
         }
