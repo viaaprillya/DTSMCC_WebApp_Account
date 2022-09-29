@@ -36,6 +36,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [Route("Register")]
         public IActionResult Register(Register register)
         {
             var result = accountRepository.Register(register);
@@ -45,6 +46,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
+        [Route("ChangePassword")]
         public IActionResult ChangePassword(ChangePassword changePassword)
         {
             var result = accountRepository.ChangePassword(changePassword);

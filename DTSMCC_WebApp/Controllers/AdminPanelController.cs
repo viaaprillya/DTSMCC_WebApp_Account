@@ -5,10 +5,10 @@ namespace DTSMCC_WebApp.Controllers
 {
     public class AdminPanelController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Authorize()
         {
             var role = HttpContext.Session.GetString("Role");
-            if(role.Equals("Admin"))
+            if(role.Equals("Employee"))
             {
                 return View();
             }

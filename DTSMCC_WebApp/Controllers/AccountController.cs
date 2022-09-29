@@ -20,7 +20,7 @@ namespace DTSMCC_WebApp.Controllers
 
         public AccountController()
         {
-            this.address = "https://localhost:44322/API/Account/";
+            this.address = "https://localhost:5001/api/Account/";
             HttpClient = new HttpClient()
             {
                 BaseAddress = new Uri(address)
@@ -34,15 +34,16 @@ namespace DTSMCC_WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Login (Login login)
         {
+            address = "https://localhost:5001/api/Account/Login";
             StringContent content = new StringContent(JsonConvert.SerializeObject(login), Encoding.UTF8, "application/json");
             var result = HttpClient.PostAsync(address, content).Result;
             if (result.IsSuccessStatusCode)
             {
-                var data = JsonConvert.DeserializeObject<ResponseClient>(await result.Content.ReadAsStringAsync());
-                HttpContext.Session.SetString("Role", data.data.Role);
-                return RedirectToAction("Index", "AdminPanel");
+                var response = JsonConvert.DeserializeObject<ResponseClient>(await result.Content.ReadAsStringAsync());
+                HttpContext.Session.SetString("Role", response.data.Role);
+                return RedirectToAction("Authorize", "AdminPanel");
             }
-            return View("Unauthorize", "ErrorPage");
+            return RedirectToAction("Unauthorized", "ErrorPage");
         }
 
         public IActionResult Registrasi()
@@ -53,11 +54,12 @@ namespace DTSMCC_WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Registrasi(Register register)
         {
+            address = "https://localhost:5001/api/Account/Register";
             StringContent content = new StringContent(JsonConvert.SerializeObject(register), Encoding.UTF8, "application/json");
             var result = HttpClient.PostAsync(address, content).Result;
             if (result.IsSuccessStatusCode)
             {
-                var data = JsonConvert.DeserializeObject<ResponseClient>(await result.Content.ReadAsStringAsync());
+                var data = JsonConvert.DeserializeObject<ResponseClientNoData>(await result.Content.ReadAsStringAsync());
                 return RedirectToAction("RegistrationSucceded", "SuccessPage");
             }
             return View();
@@ -69,13 +71,14 @@ namespace DTSMCC_WebApp.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> ChangePassword(ChangePassword changePassword)
+        public async Task<IActionResult> ForgotPassword(ChangePassword changePassword)
         {
+            address = "https://localhost:5001/api/Account/ChangePassword";
             StringContent content = new StringContent(JsonConvert.SerializeObject(changePassword), Encoding.UTF8, "application/json");
             var result = HttpClient.PostAsync(address, content).Result;
             if (result.IsSuccessStatusCode)
             {
-                var data = JsonConvert.DeserializeObject<ResponseClient>(await result.Content.ReadAsStringAsync());
+                var data = JsonConvert.DeserializeObject<ResponseClientNoData>(await result.Content.ReadAsStringAsync());
                 return RedirectToAction("ChangePasswordSucceded", "SuccessPage");
             }
             return View();
